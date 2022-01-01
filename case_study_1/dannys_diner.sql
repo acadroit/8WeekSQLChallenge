@@ -31,5 +31,50 @@ JOIN menu m
 GROUP BY s.product_id, product_name
 ORDER BY mostpurchased DESC;
 
+/*
+Which item was the most popular for each customer?
+*/
+with rank_product_cte as
+(select s.customer_id,s.product_id,m.product_name,row_number() over(partition by product_name order by s.product_id) as ranking  
+ from sales s  
+ join menu m 
+ on s.product_id=m.product_id)
+
+select customer_id,product_name, count(ranking) as productordered 
+from rank_product_cte 
+group by product_name,customer_id
+
+WITH fav_item_cte AS
+(
+	SELECT 
+    s.customer_id, 
+    m.product_name, 
+    COUNT(m.product_id) AS order_count,
+		DENSE_RANK() OVER(PARTITION BY s.customer_id ORDER BY COUNT(s.customer_id) DESC) AS rank
+FROM dbo.menu AS m
+JOIN dbo.sales AS s
+	ON m.product_id = s.product_id
+GROUP BY s.customer_id, m.product_name
+)
+
+SELECT 
+  customer_id, 
+  product_name, 
+  order_count
+FROM fav_item_cte 
+WHERE rank = 1;
+
+/*
+Which item was purchased first by the customer after they became a member?
+*/
+
+
+
+
+
+
+
+
+
 
   
