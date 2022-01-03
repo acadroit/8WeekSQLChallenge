@@ -68,11 +68,42 @@ WHERE rank = 1;
 Which item was purchased first by the customer after they became a member?
 */
 
+WITH member_sales_cte AS 
+(
+  SELECT 
+    s.customer_id, 
+    m.join_date, 
+    s.order_date, 
+    s.product_id,
+    DENSE_RANK() OVER(PARTITION BY s.customer_id ORDER BY s.order_date) AS rank
+  FROM sales AS s
+	JOIN members AS m
+		ON s.customer_id = m.customer_id
+	WHERE s.order_date >= m.join_date
+)
 
 
+SELECT 
+  s.customer_id, 
+  s.order_date, 
+  m2.product_name 
+FROM member_sales_cte AS s
+JOIN menu AS m2
+	ON s.product_id = m2.product_id
+WHERE rank = 1;
 
 
+/*
+Which item was purchased just before the customer became a member?
+*/
 
+with previous_purchased_cte as
+(
+Select s.customer_id,s.order_date,m.join_date,s.product_id,dense_rank() over(partition by s.customer_id order by s.order_date desc) as rank
+from sales s join members m on s.customer_id=m.customer_id where s.order_date<m.join_date
+)
+
+select s.customer_id,s.order_date,s.join_date,s.rank, m2.product_name from previous_purchased_cte s join menu m2 on s.product_id=m2.product_id where s.rank=1
 
 
 
