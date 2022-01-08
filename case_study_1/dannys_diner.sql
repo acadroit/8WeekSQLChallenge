@@ -105,6 +105,18 @@ from sales s join members m on s.customer_id=m.customer_id where s.order_date<m.
 
 select s.customer_id,s.order_date,s.join_date,s.rank, m2.product_name from previous_purchased_cte s join menu m2 on s.product_id=m2.product_id where s.rank=1
 
+/*
+What is the total items and amount spent for each member before they became a member?
+*/
+
+select s.customer_id,count(s.product_id) as total_items,sum(price) as sales_value 
+from sales s 
+join members m 
+on s.customer_id = m.customer_id 
+join menu mm 
+on s.product_id=mm.product_id 
+where s.order_date<m.join_date 
+group by s.customer_id
 
 
 
