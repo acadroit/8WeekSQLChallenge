@@ -18,22 +18,27 @@ SELECT * FROM cleaned_customer_orders
 
 
 CREATE VIEW runner_orders_cleaned AS(
-SELECT order_id, runner_id,
-  CASE 
-    WHEN pickup_time LIKE 'null' THEN ' '
-    ELSE pickup_time 
-    END AS pickup_time,
-  CASE 
-    WHEN distance LIKE 'null' THEN ' '
-    WHEN distance LIKE '%km' THEN TRIM('km' from distance) 
-    ELSE distance END AS distance,
-  CASE 
-    WHEN duration LIKE 'null' THEN ' ' 
-    WHEN duration LIKE '%mins' THEN TRIM('mins' from duration) 
-    WHEN duration LIKE '%minute' THEN TRIM('minute' from duration)        
-    WHEN duration LIKE '%minutes' THEN TRIM('minutes' from duration)       
-    ELSE duration END AS duration,
-  CASE 
-    WHEN cancellation IS NULL or cancellation LIKE 'null' THEN ''
-    ELSE cancellation END AS cancellation
+SELECT 
+  order_id, 
+  runner_id,  
+  CASE
+	  WHEN pickup_time LIKE 'null' THEN ' '
+	  ELSE pickup_time
+	  END AS pickup_time,
+  CASE
+	  WHEN distance LIKE 'null' THEN ' '
+	  WHEN distance LIKE '%km' THEN TRIM('km' from distance)
+	  ELSE convert(float,distance)
+    END AS distance,
+  CASE
+	  WHEN duration LIKE 'null' THEN ' '
+	  WHEN duration LIKE '%mins' THEN TRIM('mins' from duration)
+	  WHEN duration LIKE '%minute' THEN TRIM('minute' from duration)
+	  WHEN duration LIKE '%minutes' THEN TRIM('minutes' from duration)
+	  ELSE convert(int,duration)
+	  END AS duration,
+  CASE
+	  WHEN cancellation IS NULL or cancellation LIKE 'null' THEN ' '
+	  ELSE cancellation
+	  END AS cancellation
 FROM runner_orders)
