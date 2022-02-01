@@ -55,5 +55,23 @@ group by c.order_id
 select max(pizza_count) from max_pizza_cte
 
 
+/* 
+For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
