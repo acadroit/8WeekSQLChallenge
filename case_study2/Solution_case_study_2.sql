@@ -56,8 +56,10 @@ select max(pizza_count) from max_pizza_cte
 
 
 /* 
-For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
+What was the total volume of pizzas ordered for each hour of the day?
 */
+
+SELECT DATEPART(HOUR, order_time) AS hour_of_day,COUNT(DATEPART(HOUR, order_time)) FROM cleaned_customer_orders group by DATEPART(HOUR, order_time)
 
 
 
