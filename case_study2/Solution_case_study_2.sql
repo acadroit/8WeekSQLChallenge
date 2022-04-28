@@ -1,8 +1,11 @@
 /* 
 How many pizzas were ordered?
 */
-SELECT COUNT(*) AS pizza_order_count
+
+SELECT COUNT(DISTINCT(order_id)) AS pizza_ordered
 FROM cleaned_customer_orders
+
+
 
 /*
 How many unique customer orders were made?
