@@ -24,14 +24,14 @@ GROUP BY runner_id
 /*
 How many of each type of pizza was delivered?
 */
-SELECT p.pizza_name, COUNT(c.pizza_id) AS delivered_pizza_count
-FROM cleaned_customer_orders AS c
-JOIN runner_orders_cleaned AS r
- ON c.order_id = r.order_id
-JOIN pizza_names AS p
- ON c.pizza_id = p.pizza_id
-WHERE r.distance != 0
-GROUP BY p.pizza_name;
+SELECT pn.pizza_name,COUNT(ccs.pizza_id) 
+FROM cleaned_customer_orders ccs 
+JOIN runner_orders_cleaned roc 
+ON ccs.order_id=roc.order_id 
+JOIN pizza_names pn 
+ON ccs.pizza_id=pn.pizza_id 
+WHERE roc.distance!=0 
+GROUP BY pn.pizza_name
 
 /*
 How many Vegetarian and Meatlovers were ordered by each customer?
