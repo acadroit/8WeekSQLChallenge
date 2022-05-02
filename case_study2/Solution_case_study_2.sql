@@ -47,15 +47,15 @@ ORDER BY c.customer_id;
 What was the maximum number of pizzas delivered in a single order?
 */
 
-with max_pizza_cte  as
-(
-SELECT c.order_id,count(c.pizza_id) as pizza_count 
-from cleaned_customer_orders c right join runner_orders_cleaned r 
-on c.order_id=r.order_id  
-WHERE r.distance != 0 
-group by c.order_id
+with check_cte as(
+SELECT cc.order_id,COUNT(cc.order_id) AS number_of_delivery 
+FROM cleaned_customer_orders cc 
+JOIN runner_orders_cleaned rc ON cc.order_id=rc.order_id 
+WHERE rc.distance!=0 
+GROUP BY cc.order_id
 )
-select max(pizza_count) from max_pizza_cte
+
+SELECT MAX(number_of_delivery) as max_delivery FROM check_cte
 
 
 /* 
