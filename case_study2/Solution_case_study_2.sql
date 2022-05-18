@@ -64,11 +64,42 @@ What was the total volume of pizzas ordered for each hour of the day?
 
 SELECT DATEPART(HOUR, order_time) AS hour_of_day,COUNT(order_id) FROM cleaned_customer_orders group by DATEPART(HOUR, order_time)
 
+/* 
+For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
+*/
 
+SELECT 
+	customer_id,
+	SUM(CASE 
+		WHEN exclusions != '' or extras != '' then 1
+		ELSE 0
+	END) AS atLeastOneChange,
+	SUM(CASE 
+  WHEN c.exclusions = ' ' AND c.extras = ' ' THEN 1 
+  ELSE 0
+  END) AS no_change
+FROM cleaned_customer_orders AS c
+JOIN runner_orders_cleaned AS r
+ ON c.order_id = r.order_id
+WHERE r.distance != 0
+GROUP BY c.customer_id
 
+/*
+How many pizzas were delivered that had both exclusions and extras?
+*/
 
-
-
+SELECT 
+	customer_id,
+	sum(case 
+		when exclusions != '' and extras != '' then 1
+		else 0
+	end) AS BothExclusionAndExtrasChanges
+	
+FROM cleaned_customer_orders AS c
+JOIN runner_orders_cleaned AS r
+ ON c.order_id = r.order_id
+WHERE r.distance != 0
+group by c.customer_id
 
 
 
