@@ -22,7 +22,7 @@ SELECT customer_id,order_date,ROW_NUMBER() OVER(partition BY customer_id ORDER B
 FROM sales s 
 JOIN menu m ON s.product_id=m.product_id)
 
-select * from check_cte where dateranking=1
+SELECT customer_id,product_name FROM firstItem_cte WHERE dateranking=1
 
 /*
 What is the most purchased item on the menu and how many times was it purchased by all customers?
