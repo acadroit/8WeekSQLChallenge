@@ -3,19 +3,24 @@ LINK: https://8weeksqlchallenge.com/case-study-1/
 /*
 What is the total amount each customer spent at the restaurant?
 */
-select s.customer_id, sum(m.price) as TotalMoneySpent from sales s join menu m on s.product_id=m.product_id group by s.customer_id
+SELECT s.customer_id, SUM(m.price) AS TotalMoneySpent 
+FROM sales s JOIN menu m ON s.product_id=m.product_id 
+GROUP BY s.customer_id
 
 /*
 What was the first item from the menu purchased by each customer?
 */
-select customer_id, count(order_date) as VisitCount from sales group by customer_id
+SELECT customer_id, COUNT(order_date) AS VisitCount 
+FROM sales 
+GROUP BY customer_id
 
 /*
 How many days has each customer visited the restaurant?
 */
-with firstItem_cte as(
-select customer_id,order_date,ROW_NUMBER() over(partition by customer_id order by order_date) as dateRanking,s.product_id,m.product_name
-from sales s join menu m on s.product_id=m.product_id)
+with firstItem_cte AS(
+SELECT customer_id,order_date,ROW_NUMBER() OVER(partition BY customer_id ORDER BY order_date) AS dateRanking,s.product_id,m.product_name
+FROM sales s 
+JOIN menu m ON s.product_id=m.product_id)
 
 select * from check_cte where dateranking=1
 
