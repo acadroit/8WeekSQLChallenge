@@ -11,13 +11,13 @@ What was the first item from the menu purchased by each customer?
 select customer_id, count(order_date) as VisitCount from sales group by customer_id
 
 /*
-What was the first item from the menu purchased by each customer?
+How many days has each customer visited the restaurant?
 */
-with purchased_cte as
-(select customer_id,product_name,order_date, dense_rank () over(partition by customer_id order by order_date) as rank
+with firstItem_cte as(
+select customer_id,order_date,ROW_NUMBER() over(partition by customer_id order by order_date) as dateRanking,s.product_id,m.product_name
 from sales s join menu m on s.product_id=m.product_id)
 
-select customer_id, product_name from purchased_cte  where rank=1 group by customer_id, product_name
+select * from check_cte where dateranking=1
 
 /*
 What is the most purchased item on the menu and how many times was it purchased by all customers?
