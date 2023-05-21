@@ -10,19 +10,21 @@ GROUP BY s.customer_id
 /*
 What was the first item from the menu purchased by each customer?
 */
-SELECT customer_id, COUNT(order_date) AS VisitCount 
-FROM sales 
-GROUP BY customer_id
 
-/*
-How many days has each customer visited the restaurant?
-*/
 with firstItem_cte AS(
 SELECT customer_id,order_date,ROW_NUMBER() OVER(partition BY customer_id ORDER BY order_date) AS dateRanking,s.product_id,m.product_name
 FROM sales s 
 JOIN menu m ON s.product_id=m.product_id)
 
 SELECT customer_id,product_name FROM firstItem_cte WHERE dateranking=1
+
+/*
+How many days has each customer visited the restaurant?
+*/
+
+SELECT customer_id, COUNT(order_date) AS VisitCount 
+FROM sales 
+GROUP BY customer_id
 
 /*
 What is the most purchased item on the menu and how many times was it purchased by all customers?
